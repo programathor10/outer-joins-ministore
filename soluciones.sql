@@ -3,7 +3,7 @@
 -- Autor: Bruno Coccetta
 -- Fecha: 23/11/2026
 -- ══════════════════════════════════════════
-USE CLASE_JOIN;
+
 -- ── CONSULTA 1: LEFT JOIN ─────────────────
 -- Pregunta de negocio: ¿Qué productos del catálogo nunca fueron vendidos?
 -- Mostrá todos los productos y sus ventas asociadas.
@@ -14,7 +14,8 @@ SELECT
 	v.cantidad
 FROM productos p
 LEFT JOIN ventas v ON
-v.producto_id = p.producto_id;
+v.producto_id = p.producto_id
+WHERE v.cantidad IS NULL;
 
 
 -- ── CONSULTA 2: RIGHT JOIN ────────────────
@@ -27,7 +28,8 @@ SELECT
 	v.venta_id
 FROM productos p
 RIGHT JOIN ventas v ON
-p.producto_id = v.producto_id;
+p.producto_id = v.producto_id
+WHERE p.producto_id IS NULL;
 
 -- ── CONSULTA 3: FULL OUTER JOIN ───────────
 -- Pregunta de negocio: Vista completa de auditoría que muestre
@@ -38,5 +40,14 @@ SELECT
 	p.nombre,
 	v.venta_id
 FROM productos p 
-FULL OUTER JOIN ventas v 
+LEFT JOIN ventas v 
+ON p.producto_id=v.producto_id
+
+UNION
+
+SELECT 
+	p.nombre,
+	v.venta_id
+FROM productos p 
+RIGHT JOIN ventas v 
 ON p.producto_id=v.producto_id;
